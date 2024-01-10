@@ -88,7 +88,7 @@ contract AToken is VersionedInitializable, ScaledBalanceTokenBase, EIP712Base, I
     address onBehalfOf,
     uint256 amount,
     uint256 index
-  ) external virtual override onlyPool returns (bool) {
+  ) public virtual override onlyPool returns (bool) {
     return _mintScaled(caller, onBehalfOf, amount, index);
   }
 
@@ -98,7 +98,7 @@ contract AToken is VersionedInitializable, ScaledBalanceTokenBase, EIP712Base, I
     address receiverOfUnderlying,
     uint256 amount,
     uint256 index
-  ) external virtual override onlyPool {
+  ) public virtual override onlyPool {
     _burnScaled(from, receiverOfUnderlying, amount, index);
     if (receiverOfUnderlying != address(this)) {
       IERC20(_underlyingAsset).safeTransfer(receiverOfUnderlying, amount);
@@ -106,7 +106,7 @@ contract AToken is VersionedInitializable, ScaledBalanceTokenBase, EIP712Base, I
   }
 
   /// @inheritdoc IAToken
-  function mintToTreasury(uint256 amount, uint256 index) external virtual override onlyPool {
+  function mintToTreasury(uint256 amount, uint256 index) public virtual override onlyPool {
     if (amount == 0) {
       return;
     }
@@ -118,7 +118,7 @@ contract AToken is VersionedInitializable, ScaledBalanceTokenBase, EIP712Base, I
     address from,
     address to,
     uint256 value
-  ) external virtual override onlyPool {
+  ) public virtual override onlyPool {
     // Being a normal transfer, the Transfer() and BalanceTransfer() are emitted
     // so no need to emit a specific event here
     _transfer(from, to, value, false);
@@ -153,7 +153,7 @@ contract AToken is VersionedInitializable, ScaledBalanceTokenBase, EIP712Base, I
   }
 
   /// @inheritdoc IAToken
-  function transferUnderlyingTo(address target, uint256 amount) external virtual override onlyPool {
+  function transferUnderlyingTo(address target, uint256 amount) public virtual override onlyPool {
     IERC20(_underlyingAsset).safeTransfer(target, amount);
   }
 
@@ -162,7 +162,7 @@ contract AToken is VersionedInitializable, ScaledBalanceTokenBase, EIP712Base, I
     address user,
     address onBehalfOf,
     uint256 amount
-  ) external virtual override onlyPool {
+  ) public virtual override onlyPool {
     // Intentionally left blank
   }
 

@@ -106,7 +106,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
    * @dev Caching the address of the PoolAddressesProvider in order to reduce gas consumption on subsequent operations
    * @param provider The address of the PoolAddressesProvider
    */
-  function initialize(IPoolAddressesProvider provider) external virtual initializer {
+  function initialize(IPoolAddressesProvider provider) public virtual initializer {
     require(provider == ADDRESSES_PROVIDER, Errors.INVALID_ADDRESSES_PROVIDER);
     _maxStableRateBorrowSizePercent = 0.25e4;
   }
@@ -117,7 +117,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
     uint256 amount,
     address onBehalfOf,
     uint16 referralCode
-  ) external virtual override onlyBridge {
+  ) public virtual override onlyBridge {
     BridgeLogic.executeMintUnbacked(
       _reserves,
       _reservesList,
@@ -134,7 +134,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
     address asset,
     uint256 amount,
     uint256 fee
-  ) external virtual override onlyBridge returns (uint256) {
+  ) public virtual override onlyBridge returns (uint256) {
     return
       BridgeLogic.executeBackUnbacked(_reserves[asset], asset, amount, fee, _bridgeProtocolFee);
   }
@@ -441,7 +441,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
   }
 
   /// @inheritdoc IPool
-  function mintToTreasury(address[] calldata assets) external virtual override {
+  function mintToTreasury(address[] calldata assets) public virtual override {
     PoolLogic.executeMintToTreasury(_reserves, assets);
   }
 
@@ -571,7 +571,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
     uint256 amount,
     uint256 balanceFromBefore,
     uint256 balanceToBefore
-  ) external virtual override {
+  ) public virtual override {
     require(msg.sender == _reserves[asset].aTokenAddress, Errors.CALLER_NOT_ATOKEN);
     SupplyLogic.executeFinalizeTransfer(
       _reserves,
@@ -599,7 +599,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
     address stableDebtAddress,
     address variableDebtAddress,
     address interestRateStrategyAddress
-  ) external virtual override onlyPoolConfigurator {
+  ) public virtual override onlyPoolConfigurator {
     if (
       PoolLogic.executeInitReserve(
         _reserves,
@@ -620,7 +620,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
   }
 
   /// @inheritdoc IPool
-  function dropReserve(address asset) external virtual override onlyPoolConfigurator {
+  function dropReserve(address asset) public virtual override onlyPoolConfigurator {
     PoolLogic.executeDropReserve(_reserves, _reservesList, asset);
   }
 
@@ -628,7 +628,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
   function setReserveInterestRateStrategyAddress(
     address asset,
     address rateStrategyAddress
-  ) external virtual override onlyPoolConfigurator {
+  ) public virtual override onlyPoolConfigurator {
     require(asset != address(0), Errors.ZERO_ADDRESS_NOT_VALID);
     require(_reserves[asset].id != 0 || _reservesList[0] == asset, Errors.ASSET_NOT_LISTED);
     _reserves[asset].interestRateStrategyAddress = rateStrategyAddress;
@@ -638,7 +638,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
   function setConfiguration(
     address asset,
     DataTypes.ReserveConfigurationMap calldata configuration
-  ) external virtual override onlyPoolConfigurator {
+  ) public virtual override onlyPoolConfigurator {
     require(asset != address(0), Errors.ZERO_ADDRESS_NOT_VALID);
     require(_reserves[asset].id != 0 || _reservesList[0] == asset, Errors.ASSET_NOT_LISTED);
     _reserves[asset].configuration = configuration;
@@ -647,7 +647,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
   /// @inheritdoc IPool
   function updateBridgeProtocolFee(
     uint256 protocolFee
-  ) external virtual override onlyPoolConfigurator {
+  ) public virtual override onlyPoolConfigurator {
     _bridgeProtocolFee = protocolFee;
   }
 
@@ -655,7 +655,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
   function updateFlashloanPremiums(
     uint128 flashLoanPremiumTotal,
     uint128 flashLoanPremiumToProtocol
-  ) external virtual override onlyPoolConfigurator {
+  ) public virtual override onlyPoolConfigurator {
     _flashLoanPremiumTotal = flashLoanPremiumTotal;
     _flashLoanPremiumToProtocol = flashLoanPremiumToProtocol;
   }
@@ -664,7 +664,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
   function configureEModeCategory(
     uint8 id,
     DataTypes.EModeCategory memory category
-  ) external virtual override onlyPoolConfigurator {
+  ) public virtual override onlyPoolConfigurator {
     // category 0 is reserved for volatile heterogeneous assets and it's always disabled
     require(id != 0, Errors.EMODE_CATEGORY_RESERVED);
     _eModeCategories[id] = category;
@@ -678,7 +678,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
   }
 
   /// @inheritdoc IPool
-  function setUserEMode(uint8 categoryId) external virtual override {
+  function setUserEMode(uint8 categoryId) public virtual override {
     EModeLogic.executeSetUserEMode(
       _reserves,
       _reservesList,
@@ -701,7 +701,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
   /// @inheritdoc IPool
   function resetIsolationModeTotalDebt(
     address asset
-  ) external virtual override onlyPoolConfigurator {
+  ) public virtual override onlyPoolConfigurator {
     PoolLogic.executeResetIsolationModeTotalDebt(_reserves, asset);
   }
 
@@ -710,7 +710,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
     address token,
     address to,
     uint256 amount
-  ) external virtual override onlyPoolAdmin {
+  ) public virtual override onlyPoolAdmin {
     PoolLogic.executeRescueTokens(token, to, amount);
   }
 
@@ -721,7 +721,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
     uint256 amount,
     address onBehalfOf,
     uint16 referralCode
-  ) external virtual override {
+  ) public virtual override {
     SupplyLogic.executeSupply(
       _reserves,
       _reservesList,

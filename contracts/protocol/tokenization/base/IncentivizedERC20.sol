@@ -119,7 +119,7 @@ abstract contract IncentivizedERC20 is Context, IERC20Detailed {
   }
 
   /// @inheritdoc IERC20
-  function transfer(address recipient, uint256 amount) external virtual override returns (bool) {
+  function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
     uint128 castAmount = amount.toUint128();
     _transfer(_msgSender(), recipient, castAmount);
     return true;
@@ -134,7 +134,7 @@ abstract contract IncentivizedERC20 is Context, IERC20Detailed {
   }
 
   /// @inheritdoc IERC20
-  function approve(address spender, uint256 amount) external virtual override returns (bool) {
+  function approve(address spender, uint256 amount) public virtual override returns (bool) {
     _approve(_msgSender(), spender, amount);
     return true;
   }
@@ -144,7 +144,7 @@ abstract contract IncentivizedERC20 is Context, IERC20Detailed {
     address sender,
     address recipient,
     uint256 amount
-  ) external virtual override returns (bool) {
+  ) public virtual override returns (bool) {
     uint128 castAmount = amount.toUint128();
     _approve(sender, _msgSender(), _allowances[sender][_msgSender()] - castAmount);
     _transfer(sender, recipient, castAmount);
@@ -157,7 +157,7 @@ abstract contract IncentivizedERC20 is Context, IERC20Detailed {
    * @param addedValue The amount being added to the allowance
    * @return `true`
    */
-  function increaseAllowance(address spender, uint256 addedValue) external virtual returns (bool) {
+  function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
     _approve(_msgSender(), spender, _allowances[_msgSender()][spender] + addedValue);
     return true;
   }
@@ -171,7 +171,7 @@ abstract contract IncentivizedERC20 is Context, IERC20Detailed {
   function decreaseAllowance(
     address spender,
     uint256 subtractedValue
-  ) external virtual returns (bool) {
+  ) public virtual returns (bool) {
     _approve(_msgSender(), spender, _allowances[_msgSender()][spender] - subtractedValue);
     return true;
   }

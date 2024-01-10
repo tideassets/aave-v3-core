@@ -126,7 +126,7 @@ contract StableDebtToken is DebtTokenBase, IncentivizedERC20, IStableDebtToken {
     address onBehalfOf,
     uint256 amount,
     uint256 rate
-  ) external virtual override onlyPool returns (bool, uint256, uint256) {
+  ) public virtual override onlyPool returns (bool, uint256, uint256) {
     MintLocalVars memory vars;
 
     if (user != onBehalfOf) {
@@ -178,7 +178,7 @@ contract StableDebtToken is DebtTokenBase, IncentivizedERC20, IStableDebtToken {
   function burn(
     address from,
     uint256 amount
-  ) external virtual override onlyPool returns (uint256, uint256) {
+  ) public virtual override onlyPool returns (uint256, uint256) {
     (, uint256 currentBalance, uint256 balanceIncrease) = _calculateBalanceIncrease(from);
 
     uint256 previousSupply = totalSupply();
@@ -362,7 +362,7 @@ contract StableDebtToken is DebtTokenBase, IncentivizedERC20, IStableDebtToken {
    * @dev Being non transferrable, the debt token does not implement any of the
    * standard ERC20 functions for transfer and allowance.
    */
-  function transfer(address, uint256) external virtual override returns (bool) {
+  function transfer(address, uint256) public virtual override returns (bool) {
     revert(Errors.OPERATION_NOT_SUPPORTED);
   }
 
@@ -370,19 +370,19 @@ contract StableDebtToken is DebtTokenBase, IncentivizedERC20, IStableDebtToken {
     revert(Errors.OPERATION_NOT_SUPPORTED);
   }
 
-  function approve(address, uint256) external virtual override returns (bool) {
+  function approve(address, uint256) public virtual override returns (bool) {
     revert(Errors.OPERATION_NOT_SUPPORTED);
   }
 
-  function transferFrom(address, address, uint256) external virtual override returns (bool) {
+  function transferFrom(address, address, uint256) public virtual override returns (bool) {
     revert(Errors.OPERATION_NOT_SUPPORTED);
   }
 
-  function increaseAllowance(address, uint256) external virtual override returns (bool) {
+  function increaseAllowance(address, uint256) public virtual override returns (bool) {
     revert(Errors.OPERATION_NOT_SUPPORTED);
   }
 
-  function decreaseAllowance(address, uint256) external virtual override returns (bool) {
+  function decreaseAllowance(address, uint256) public virtual override returns (bool) {
     revert(Errors.OPERATION_NOT_SUPPORTED);
   }
 }
